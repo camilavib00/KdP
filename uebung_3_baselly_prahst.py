@@ -42,7 +42,7 @@ lovedDigits Ziffern des input ints werden stellenweise gegen ihre verliebte Zahl
 Beispiel: reverseDigits(165702) − > 945308
 """
 import math
-
+"""
 #(i) for loop Implementierung
 def lovedDigits_for(num):
     if num == 0:
@@ -70,14 +70,20 @@ for i in nums:
 
 #(ii) while loop Implementierung
 def lovedDigits_while(num):
-    while num >= 0:
-        digit = num % 10
-        if digit == 0:
-            loved_num = 0
-            continue
+    verliebte_zahl = ""
+    while num > 0:
+        rest = num % 10
+        if rest == 0:
+            verliebte_ziffer = 0
         else:
-            loved_num = 10 - digit
+            verliebte_ziffer = 10 - rest
+        verliebte_zahl = str(verliebte_ziffer) + verliebte_zahl
         num //= 10
+    return verliebte_zahl
+
+nums= [222, 0, 10, 457532456, 101, 10110]
+for i in nums:
+    print(lovedDigits_while(i))
 
 """""
 
@@ -99,7 +105,7 @@ nums= [222, 0, 10, 457532456, 101, 10110]
 for i in nums:
     print(lovedDigits(i))
 
-"""""
+
 Aufgabe 3: Rekursion und Schleifen
 b)pyTriple()
 
