@@ -17,11 +17,13 @@ def is_sorted(xs):
             return False
     return True
 
+
 def bubblesort(xs):
     while not is_sorted(xs):                                    #incorrect #1 switch to amt of values in array
         for i in range(0, len(xs)-1, 1):                        #4
             if xs[i] > xs[i+1]:                                 #2
                 xs = xs[:i-1] + xs[i+1] + xs[i] + xs[i+2:]      #3
+
 
 """
 Aufgabe 3: Rekursion und Schleifen
