@@ -11,19 +11,13 @@ Input: Unsortierte Liste von integers
 Output: Von klein nach groß sortierte Liste von integers
 Signatur: bubblesort: Liste[int] -> Liste[int]
 """
-def is_sorted(xs):
-    for num in range(0, len(xs)-1,1):
-        if xs[num] > xs[num+1]:
-            return False
-    return True
-
 
 def bubblesort(xs):
-    while not is_sorted(xs):                                    #incorrect #1 switch to amt of values in array
-        for i in range(0, len(xs)-1, 1):                        #4
+    xs_len = len(xs)-1                                          #value amount in list
+    for j in range(0, xs_len, 1):                               #4
+        for i in range(0, xs_len-1, 1):                         #1
             if xs[i] > xs[i+1]:                                 #2
                 xs = xs[:i-1] + xs[i+1] + xs[i] + xs[i+2:]      #3
-
 
 """
 Aufgabe 3: Rekursion und Schleifen
