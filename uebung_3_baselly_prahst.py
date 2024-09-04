@@ -36,8 +36,8 @@ Input: int
 Output:int
 Signatur: lovedDigits(int) -> int
 lovedDigits Ziffern des input ints werden stellenweise gegen ihre verliebte Zahl ausgetauscht, dabei gilt:
-    n + verliebte_zahl = 10
-    rekursionsanker verliebte_zahl(0) = 0
+    1. n + verliebte_zahl = 10
+    2. verliebte_zahl(0) = 0
     keine Umwandlung in Liste oder String
 Beispiel: reverseDigits(165702) − > 945308
 """
@@ -50,14 +50,14 @@ def lovedDigits_for(num):
         return 0
     verliebte_zahl = ""
     int_len = math.ceil(math.log10(num))
-    for i in range(int_len,-1, -1):
+    for i in range(int_len,-1, -1): #rückwärts über int_len ziffern berechnen.
         if num == 0:
-            break
+            break # alle ziffern berechnet
         rest = num % 10
         num //= 10
-        if rest == 0:
+        if rest == 0: #2.
             verliebte_ziffer = 0
-        else:
+        else: #1.
             verliebte_ziffer = 10 - rest
         verliebte_zahl = str(verliebte_ziffer) + verliebte_zahl
     return int(verliebte_zahl)
@@ -73,12 +73,12 @@ def lovedDigits_while(num):
     verliebte_zahl = ""
     while num > 0:
         rest = num % 10
-        if rest == 0:
+        if rest == 0: #2
             verliebte_ziffer = 0
-        else:
+        else: #1
             verliebte_ziffer = 10 - rest
-        verliebte_zahl = str(verliebte_ziffer) + verliebte_zahl
         num //= 10
+        verliebte_zahl = str(verliebte_ziffer) + verliebte_zahl #berechnung ohne strings, aber Ausgabe mit
     return verliebte_zahl
 """
 nums= [222, 0, 10, 457532456, 101, 10110]
@@ -94,9 +94,9 @@ def lovedDigits(num):
     #rekursionsschritt
     rest = num % 10
     num //= 10
-    if (rest == 0):
+    if (rest == 0): #2
         verliebte_zahl = 0
-    else:
+    else: #1
         verliebte_zahl = 10 - rest
     return lovedDigits(num) * 10 + verliebte_zahl
 
@@ -107,6 +107,7 @@ for i in nums:
 
 Aufgabe 3: Rekursion und Schleifen
 b)pyTriple()
+
 
 pyTriple
 Eingabe: int
