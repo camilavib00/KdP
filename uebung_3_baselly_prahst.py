@@ -47,16 +47,27 @@ import math
 def lovedDigits_for(num):
     if num == 0:
         return 0
+    verliebte_zahl = ""
     int_len = math.ceil(math.log10(num))
     for i in range(int_len,-1, -1):
-        print("Index: ", i)
+        if num == 0:
+            break
         rest = num % 10
-        print("rest: ", rest)
+        num //= 10
+        if rest == 0:
+            verliebte_ziffer = 0
+        else:
+            verliebte_ziffer = 10 - rest
+        verliebte_zahl = str(verliebte_ziffer) + verliebte_zahl
+    return int(verliebte_zahl)
 
-    return 0
+nums= [222, 0, 10, 457532456, 101, 10110]
+for i in nums:
+    print(lovedDigits_for(i))
 
-print(lovedDigits_for(12343))
-"""
+
+"""""
+
 #(ii) while loop Implementierung
 def lovedDigits_while(num):
     while num >= 0:
@@ -68,6 +79,7 @@ def lovedDigits_while(num):
             loved_num = 10 - digit
         num //= 10
 
+"""""
 
 #(iii) rekursive Implementierung
 def lovedDigits(num):
@@ -76,20 +88,18 @@ def lovedDigits(num):
         return 0
     #rekursionsschritt
     rest = num % 10
+    num //= 10
     if (rest == 0):
         verliebte_zahl = 0
-        num //= 10
-        return lovedDigits(num) * 10 + verliebte_zahl
     else:
         verliebte_zahl = 10 - rest
-        num //= 10
-        return lovedDigits(num) * 10 + verliebte_zahl
+    return lovedDigits(num) * 10 + verliebte_zahl
 
-nums= [222, 0, 10, 457532456, 101]
+nums= [222, 0, 10, 457532456, 101, 10110]
 for i in nums:
     print(lovedDigits(i))
 
-
+"""""
 Aufgabe 3: Rekursion und Schleifen
 b)pyTriple()
 
