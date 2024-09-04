@@ -207,20 +207,31 @@ def pyTripleRec(zahl: int) -> list:
 
 
 """Hauptfunktion: """
-"""
+
 def pyTriple(zahl: int, methode: str) -> list:
+    # Eingabestring von User in kleinbuchstaben, um zu viele if-Abfragen zu vermeiden
     methode = methode.lower()
+    # wenn davon auszugehen ist, dass der User eine For-Schleife möchte,
+    # wird pyTripleFor(zahl) ausgeführt
     if "for" in methode:
         return pyTripleFor(zahl)
+    # wenn davon auszugehen ist, dass der User eine While-Schleife möchte,
+    # wird pyTripleWhile(zahl) ausgeführt
     elif "while" in methode:
         return pyTripleWhile(zahl)
+    # wenn davon auszugehen ist, dass der User eine Rekursion möchte,
+    # wird pyTripleRec(zahl) ausgeführt
     elif "rekurs" in methode  or "recurs" in methode:
         return pyTripleRec(zahl)
+    # wenn aus der Eingabe keine eindeutige Methode hervorgeht, ist die
+    # Eingabe ungültig
     else:
         return "Ungültige Eingabe"
 
+""" 
 # zum Testen
 method = input("Bitte eine Methode eingeben (For-Schleife, While-Schleife, Rekursion): ")
 for i in range(1, int(input('Bitte eine natürliche Zahl eingeben: '))+1):
-    print(f'{i}: {pyTriple(i, method)}')
+    print(f'{i}: {pyTriple(i, method)}') 
 """
+
