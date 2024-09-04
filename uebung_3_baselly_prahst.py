@@ -41,8 +41,9 @@ lovedDigits Ziffern des input ints werden stellenweise gegen ihre verliebte Zahl
     keine Umwandlung in Liste oder String
 Beispiel: reverseDigits(165702) − > 945308
 """
+
 import math
-"""
+
 #(i) for loop Implementierung
 def lovedDigits_for(num):
     if num == 0:
@@ -61,12 +62,11 @@ def lovedDigits_for(num):
         verliebte_zahl = str(verliebte_ziffer) + verliebte_zahl
     return int(verliebte_zahl)
 
+"""
 nums= [222, 0, 10, 457532456, 101, 10110]
 for i in nums:
     print(lovedDigits_for(i))
-
-
-"""""
+"""
 
 #(ii) while loop Implementierung
 def lovedDigits_while(num):
@@ -80,11 +80,10 @@ def lovedDigits_while(num):
         verliebte_zahl = str(verliebte_ziffer) + verliebte_zahl
         num //= 10
     return verliebte_zahl
-
+"""
 nums= [222, 0, 10, 457532456, 101, 10110]
 for i in nums:
     print(lovedDigits_while(i))
-
 """""
 
 #(iii) rekursive Implementierung
@@ -101,14 +100,13 @@ def lovedDigits(num):
         verliebte_zahl = 10 - rest
     return lovedDigits(num) * 10 + verliebte_zahl
 
+"""
 nums= [222, 0, 10, 457532456, 101, 10110]
 for i in nums:
     print(lovedDigits(i))
 
-
 Aufgabe 3: Rekursion und Schleifen
 b)pyTriple()
-
 
 pyTriple
 Eingabe: int
