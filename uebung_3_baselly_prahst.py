@@ -46,13 +46,16 @@ Beispiel: reverseDigits(165702) − > 945308
 Aufgabe 3: Rekursion und Schleifen
 b)pyTriple()
 
-# pyTriple
-# Eingabe: int
-# Ausgabe: list(tuple(int,int,int))
-# Voraussetzung: die Eingabe soll positiv sein
-# Effekt: keiner
-# Ergebnis: Liste pythagoreischer Tripel für die Eingegebene Zahl
 
+pyTriple
+Eingabe: int
+Ausgabe: list(tuple(int,int,int))
+Voraussetzung: die Eingabe soll positiv sein
+Effekt: keiner
+Ergebnis: Liste pythagoreischer Tripel für die Eingegebene Zahl
+"""
+
+"""Hilfsfunktionen: """
 
 # pyTriple mit for-Schleife
 def pyTripleFor(zahl: int) -> list:
@@ -75,9 +78,6 @@ def pyTripleFor(zahl: int) -> list:
     # und dann wieder in eine Liste, damit die gewünschte Klasse zurückgegeben wird
     return list(set(resultList))
 
-# zum Testen
-#for i in range(1, int(input('Aufgabe 3b) for-Schleife: \nBitte eine natürliche Zahl eingeben: '))+1):
-#    print(f'{i}: {pyTripleFor(i)}')
 
 
 # pyTriple mit while-Schleife
@@ -116,7 +116,50 @@ def pyTripleWhile(zahl: int) -> list:
     # und dann wieder in eine Liste, damit die gewünschte Klasse zurückgegeben wird
     return list(set(resultList))
 
+
+
+# pyTriple mit Rekursion
+
+""" Vorüberlegungen:
+a. Beim Testen der vorherigen Funktionen fällt auf, dass die kleinsten Tripel (3,4,5) bzw. (4,3,5) sind.
+b. Außerdem müssen a,b < c sein, da a^2 + b^2 = c^2 mit natürlichen Zahlen nicht aufgeht.
+c. Ich gehe davon aus, dass das Tripel (0,2,2) keine korrekte Lösung ist, denn:
+    1. wenn eine Seitenlänge 0 ist, ist die Figur kein Dreieck mehr,
+    2. wir arbeiten mit natürlichen Zahlen, und da das Problem geometrisch ist, ist es sinnvoll,
+        die natürlichen Zahlen als IN = {1,2,3,...} zu betrachten. """
+
+def pyTripleRec(zahl: int) -> list:
+    returnList = []
+    c = zahl
+
+    # Rekursionsanker
+    if c < 5:
+        return returnList
+    
+    # Rekursionsschritt
+    for a in range(1,c):
+        for b in range(2,c):
+            if (a*a + b*b == c*c):
+                returnList.append((a,b,c))
+    return returnList + pyTripleRec(c - 1)
+    
+
+
+"""Hauptfunktion: """
+
+def pyTriple(zahl: int, methode: str) -> list:
+    methode = methode.lower()
+    if "for" in methode:
+        return pyTripleFor(zahl)
+    elif "while" in methode:
+        return pyTripleWhile(zahl)
+    elif "rekurs" in methode  or "recurs" in methode:
+        return pyTripleRec(zahl)
+    else:
+        return "Ungültige Eingabe"
+    
 # zum Testen
-#for i in range(1, int(input('Aufgabe 3b) while-Schleife: \nBitte eine natürliche Zahl eingeben: '))+1):
-#    print(f'{i}: {pyTripleWhile(i)}')
-"""
+method = input("Bitte eine Methode eingeben (For-Schleife, While-Schleife, Rekursion): ")
+for i in range(1, int(input('Bitte eine natürliche Zahl eingeben: '))+1):
+    print(f'{i}: {pyTriple(i, method)}')
+
