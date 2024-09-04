@@ -9,7 +9,7 @@ Bubblesort Beschreibung:
 
 Input: Unsortierte Liste von integers
 Output: Von klein nach groß sortierte Liste von integers
-Signatur: bubblesort: Liste[int] -> Liste[int]
+Signatur: bubblesort(Liste[int]) -> Liste[int]
 """
 def swap(val1, val2):
     xs = [val2, val1]
@@ -21,7 +21,7 @@ def bubblesort(xs):
         for i in range(0, xs_len, 1):                                            #1
             if xs[i] > xs[i+1]:                                                  #2
                     xs = xs[:i] + swap(xs[i],xs[i+1]) + xs[i+2:]                 #3
-                    print("current sorted list: ", xs)
+                    #print("current sorted list: ", xs)
     return xs
 
 
@@ -31,5 +31,18 @@ def bubblesort(xs):
 """
 Aufgabe 3: Rekursion und Schleifen
 a)lovedDigits()
+
+Input: int
+Output:int
+Signatur: lovedDigits(int) -> int
+lovedDigits Ziffern des input ints werden stellenweise gegen ihre verliebte Zahl ausgetauscht, dabei gilt:
+    n + verliebte_zahl = 10
+    rekursionsanker verliebte_zahl(0) = 0
+    keine Umwandlung in Liste oder String
+Beispiel: reverseDigits(165702) − > 945308
+"""
+
+"""
+Aufgabe 3: Rekursion und Schleifen
 b)pyTriple()
 """
