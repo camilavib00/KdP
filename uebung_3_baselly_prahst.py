@@ -42,16 +42,22 @@ lovedDigits Ziffern des input ints werden stellenweise gegen ihre verliebte Zahl
 Beispiel: reverseDigits(165702) − > 945308
 """
 import math
+
 #(i) for loop Implementierung
 def lovedDigits_for(num):
     if num == 0:
         return 0
     int_len = math.ceil(math.log10(num))
-    for digit in range(int_len):
+    for i in range(int_len,-1, -1):
+        print("Index: ", i)
+        rest = num % 10
+        print("rest: ", rest)
 
-    return loved_num
+    return 0
+
+print(lovedDigits_for(12343))
+"""
 #(ii) while loop Implementierung
-
 def lovedDigits_while(num):
     while num >= 0:
         digit = num % 10
@@ -60,16 +66,30 @@ def lovedDigits_while(num):
             continue
         else:
             loved_num = 10 - digit
-        num = num //= 10
-#(iii) rekursive Implementierung
+        num //= 10
 
+
+#(iii) rekursive Implementierung
 def lovedDigits(num):
     #rekursionsanker
     if num == 0:
         return 0
     #rekursionsschritt
+    rest = num % 10
+    if (rest == 0):
+        verliebte_zahl = 0
+        num //= 10
+        return lovedDigits(num) * 10 + verliebte_zahl
+    else:
+        verliebte_zahl = 10 - rest
+        num //= 10
+        return lovedDigits(num) * 10 + verliebte_zahl
 
-"""
+nums= [222, 0, 10, 457532456, 101]
+for i in nums:
+    print(lovedDigits(i))
+
+
 Aufgabe 3: Rekursion und Schleifen
 b)pyTriple()
 
@@ -101,7 +121,7 @@ def pyTripleFor(zahl: int) -> list:
                     resultList.append((i,k,j))
                 elif (j*j + k*k) == (i*i):
                     resultList.append((j,k,i))
-    # wandle die Ergebnisliste in ein set um, um doppelte Einträge zu entfernen 
+    # wandle die Ergebnisliste in ein set um, um doppelte Einträge zu entfernen
     # und dann wieder in eine Liste, damit die gewünschte Klasse zurückgegeben wird
     return list(set(resultList))
 
@@ -139,7 +159,7 @@ def pyTripleWhile(zahl: int) -> list:
         # 'reset' j und k
         j = 1
         k = 1
-    # wandle die Ergebnisliste in ein set um, um doppelte Einträge zu entfernen 
+    # wandle die Ergebnisliste in ein set um, um doppelte Einträge zu entfernen
     # und dann wieder in eine Liste, damit die gewünschte Klasse zurückgegeben wird
     return list(set(resultList))
 
@@ -162,18 +182,18 @@ def pyTripleRec(zahl: int) -> list:
     # Rekursionsanker
     if c < 5:
         return returnList
-    
+
     # Rekursionsschritt
     for a in range(1,c):
         for b in range(2,c):
             if (a*a + b*b == c*c):
                 returnList.append((a,b,c))
     return returnList + pyTripleRec(c - 1)
-    
+
 
 
 """Hauptfunktion: """
-
+"""
 def pyTriple(zahl: int, methode: str) -> list:
     methode = methode.lower()
     if "for" in methode:
@@ -184,9 +204,9 @@ def pyTriple(zahl: int, methode: str) -> list:
         return pyTripleRec(zahl)
     else:
         return "Ungültige Eingabe"
-    
+
 # zum Testen
 method = input("Bitte eine Methode eingeben (For-Schleife, While-Schleife, Rekursion): ")
 for i in range(1, int(input('Bitte eine natürliche Zahl eingeben: '))+1):
     print(f'{i}: {pyTriple(i, method)}')
-
+"""
