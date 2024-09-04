@@ -16,22 +16,18 @@ def swap(val1, val2):
     return xs
 
 def bubblesort(xs):
-    xs_len = len(xs)-1
-    print("Our List has ", xs_len+1, " elements in it! \n")                                     #value amount in list
-    for j in range(0, xs_len, 1):
-        print("We're at loop: ", j, "\n")                               #4
-        for i in range(0, xs_len, 1):
-            print("We're at index: ", i, "\n")
-            print("comparing: ", xs[i], " with: ", xs[i+1], "\n")                         #1
-            if xs[i] > xs[i+1]:
-                print("xs[i] > xs[i+1]")                              #2
-                xs = xs[:i] + swap(xs[i],xs[i+1]) + xs[i+2:]  #3
-                print("current sorted list: ", xs)
+    xs_len = len(xs)-1                                                           #value amount in list
+    for j in range(0, xs_len, 1):                                                #4
+        for i in range(0, xs_len, 1):                                            #1
+            if xs[i] > xs[i+1]:                                                  #2
+                    xs = xs[:i] + swap(xs[i],xs[i+1]) + xs[i+2:]                 #3
+                    print("current sorted list: ", xs)
     return xs
 
-ls = [1, 77, 8,5,24,9]
-print(ls)
-print(bubblesort(ls))
+
+#ls = [1, 77, 8,5,24,9, 8,7,24]
+#print(ls)
+#print(bubblesort(ls))
 """
 Aufgabe 3: Rekursion und Schleifen
 a)lovedDigits()
