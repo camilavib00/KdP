@@ -72,4 +72,121 @@ def lovedDigits(num):
 """
 Aufgabe 3: Rekursion und Schleifen
 b)pyTriple()
+
+
+pyTriple
+Eingabe: int
+Ausgabe: list(tuple(int,int,int))
+Voraussetzung: die Eingabe soll positiv sein
+Effekt: keiner
+Ergebnis: Liste pythagoreischer Tripel für die Eingegebene Zahl
 """
+
+"""Hilfsfunktionen: """
+
+# pyTriple mit for-Schleife
+def pyTripleFor(zahl: int) -> list:
+    # leere Liste, in die unsere Tripel kommen
+    resultList = []
+    # 3 verschachtelte for-Schleifen, um alle Möglichkeiten der Kombination
+    # der Zahlen von 1 - Eingabezahl durchzugehen
+    for i in range(1,zahl + 1):
+        for j in range(1,zahl+1):
+            for k in range(1,zahl+1):
+                # wenn eine der Möglichkeiten a^2 + b^2 = c^2 erfüllt, wird
+                # sie der Ergebnisliste hinzugefügt
+                if (i*i + j*j) == (k*k):
+                    resultList.append((i,j,k))
+                elif (i*i + k*k) == (j*j):
+                    resultList.append((i,k,j))
+                elif (j*j + k*k) == (i*i):
+                    resultList.append((j,k,i))
+    # wandle die Ergebnisliste in ein set um, um doppelte Einträge zu entfernen 
+    # und dann wieder in eine Liste, damit die gewünschte Klasse zurückgegeben wird
+    return list(set(resultList))
+
+
+
+# pyTriple mit while-Schleife
+def pyTripleWhile(zahl: int) -> list:
+    # leere Liste, in die unsere Tripel kommen
+    resultList = []
+    # setze "(i,j,k)" = "(1,1,1)"
+    i = 1
+    j = 1
+    k = 1
+    # 3 verschachtelte while-Schleifen, um alle Möglichkeiten der Kombination
+    # der Zahlen von 1 - Eingabezahl durchzugehen
+    while i <= zahl:
+        while j <= zahl:
+            while k <= zahl:
+                # wenn eine der Möglichkeiten a^2 + b^2 = c^2 erfüllt, wird
+                # sie der Ergebnisliste hinzugefügt
+                if (i*i + j*j) == (k*k):
+                    resultList.append((i,j,k))
+                elif (i*i + k*k) == (j*j):
+                    resultList.append((i,k,j))
+                elif (j*j + k*k) == (i*i):
+                    resultList.append((j,k,i))
+                # alle k für das aktuelle j durchgehen
+                k += 1
+            # alle j für das aktuelle i durchgehen
+            j += 1
+            # 'reset' k
+            k = 1
+        # alle i bis zur Eingabezahl durchgehen
+        i += 1
+        # 'reset' j und k
+        j = 1
+        k = 1
+    # wandle die Ergebnisliste in ein set um, um doppelte Einträge zu entfernen 
+    # und dann wieder in eine Liste, damit die gewünschte Klasse zurückgegeben wird
+    return list(set(resultList))
+
+
+
+# pyTriple mit Rekursion
+
+""" Vorüberlegungen:
+a. Beim Testen der vorherigen Funktionen fällt auf, dass die kleinsten Tripel (3,4,5) bzw. (4,3,5) sind.
+b. Außerdem müssen a,b < c sein, da a^2 + b^2 = c^2 mit natürlichen Zahlen nicht aufgeht.
+c. Ich gehe davon aus, dass das Tripel (0,2,2) keine korrekte Lösung ist, denn:
+    1. wenn eine Seitenlänge 0 ist, ist die Figur kein Dreieck mehr,
+    2. wir arbeiten mit natürlichen Zahlen, und da das Problem geometrisch ist, ist es sinnvoll,
+        die natürlichen Zahlen als IN = {1,2,3,...} zu betrachten. """
+
+def pyTripleRec(zahl: int) -> list:
+    returnList = []
+    c = zahl
+
+    # Rekursionsanker
+    if c < 5:
+        return returnList
+    
+    # Rekursionsschritt
+    for a in range(1,c):
+        for b in range(2,c):
+            if (a*a + b*b == c*c):
+                returnList.append((a,b,c))
+    return returnList + pyTripleRec(c - 1)
+    
+
+
+"""Hauptfunktion: """
+
+def pyTriple(zahl: int, methode: str) -> list:
+    methode = methode.lower()
+    if "for" in methode:
+        return pyTripleFor(zahl)
+    elif "while" in methode:
+        return pyTripleWhile(zahl)
+    elif "rekurs" in methode  or "recurs" in methode:
+        return pyTripleRec(zahl)
+    else:
+        return "Ungültige Eingabe"
+    
+# zum Testen
+method = input("Bitte eine Methode eingeben (For-Schleife, While-Schleife, Rekursion): ")
+for i in range(1, int(input('Bitte eine natürliche Zahl eingeben: '))+1):
+    print(f'{i}: {pyTriple(i, method)}')
+
