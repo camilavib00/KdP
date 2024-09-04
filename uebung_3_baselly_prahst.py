@@ -41,6 +41,33 @@ lovedDigits Ziffern des input ints werden stellenweise gegen ihre verliebte Zahl
     keine Umwandlung in Liste oder String
 Beispiel: reverseDigits(165702) − > 945308
 """
+import math
+#(i) for loop Implementierung
+def lovedDigits_for(num):
+    if num == 0:
+        return 0
+    int_len = math.ceil(math.log10(num))
+    for digit in range(int_len):
+
+    return loved_num
+#(ii) while loop Implementierung
+
+def lovedDigits_while(num):
+    while num >= 0:
+        digit = num % 10
+        if digit == 0:
+            loved_num = 0
+            continue
+        else:
+            loved_num = 10 - digit
+        num = num //= 10
+#(iii) rekursive Implementierung
+
+def lovedDigits(num):
+    #rekursionsanker
+    if num == 0:
+        return 0
+    #rekursionsschritt
 
 """
 Aufgabe 3: Rekursion und Schleifen
