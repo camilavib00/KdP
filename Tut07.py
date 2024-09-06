@@ -81,6 +81,10 @@ erg = 121, a = 4, b = 484, a%2==0 -> / -> a//2=2, b*2=968
 erg = 121, a = 2, b = 968, a%2==0 -> / -> a//2=1, b*2=1936
 erg = 121, a = 1, b = 1936, a%2==1 -> erg = erg + b = 121 + 1936 = 2057 -> a//2=0, b*2=3872
 erg = 2057, a = 0 -> break
+
+Selectionsort: O(n**2)
+Quicksort: O(n**2) (average case: O(nlog(n)))
+Insertionsort: O(n**2)
 """
 
 """
