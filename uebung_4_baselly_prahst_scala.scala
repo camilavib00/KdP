@@ -1,16 +1,13 @@
 // aufgabe 3 e)
 
-// Signatur:
-    // alphaOmega
-    // Eingabe: String
-    // Ausgabe: (Int,Int)
-
-// Spezifikation:
-    // Voraussetzungen: keine
-    // Effekt: keiner
-    // Ergebnis: ein Tupel mit der Anzahl der a's und der z's in einem String (nicht case sensitive)
-
-// Hilfsfunktion:
+// Hilfsfunktion: countLetter
+// countLetter
+// Eingabe:         (Char,String)
+// Ausgabe:         Int
+// Voraussetzung:   keine
+// Effekt:          keiner
+// Ergebnis:        gibt die Anzahl der Vorkommen des eingegebenen Char
+//                  für den eingegebenen String aus
 def countLetter(m:Char,str:String):Int=
     // damit große und kleine Buchstaben gezählt werden
     val s:String = str.toLowerCase
@@ -28,6 +25,15 @@ def countLetter(m:Char,str:String):Int=
         countLetter(m,(s.tail))
 
 // alphaOmega
+// Signatur:
+    // alphaOmega
+    // Eingabe: String
+    // Ausgabe: (Int,Int)
+
+// Spezifikation:
+    // Voraussetzungen: keine
+    // Effekt: keiner
+    // Ergebnis: ein Tupel mit der Anzahl der a's und der z's in einem String (nicht case sensitive)
 def alphaOmega(str:String):(Int,Int)=
     // wende Hilfsfunktion auf String und a bzw. z an
     // und bilde daraus ein Tupel
@@ -38,7 +44,7 @@ def alphaOmega(str:String):(Int,Int)=
 
 // Aufgabe 4 a - c)
 
-// julianDate
+// julianDate       (Hilfsfunktion für 4a)
 // Eingabe:         (Int,Int,Int)
 // Ausgabe:         (Int,Int,Int)
 // Voraussetzung:   es muss ein gültiges Datum angegeben werden
@@ -61,7 +67,7 @@ def julianDate(date:(Int,Int,Int)):(Int,Int,Int)=
         ( d , nm , j )
 
 
-// numberToDay
+// numberToDay      (Aufgabe 4b)
 // Eingabe:         Int
 // Ausgabe:         String
 // Voraussetzung:   n muss ein positiver Integer mod 7 sein
@@ -79,7 +85,27 @@ def numberToDay(n:Int):String=
         case 6 => "Samstag"
 
 
-// makePositive
+// dayToNumber      (Hilfsfunktion für 4c)
+// Eingabe:         String
+// Ausgabe:         Int
+// Voraussetzung:   Eingabe muss ein Wochentag sein, ausgeschrieben, erster
+//                  Buchstabe groß, deutsch
+// Effekt:          keiner
+// Ergebnis:        es wird die Zahl des eingegebenen Wochentags ausgegeben,
+//                  wobei 0 -> Sonntag, 1 -> Montag usw.
+def dayToNumber(day:String):Int=
+    day match
+        case "Sonntag" => 0
+        case "Montag" => 1
+        case "Dienstag" => 2
+        case "Mittwoch" => 3
+        case "Donnerstag" => 4
+        case "Freitag" => 5
+        case "Samstag" => 6
+
+
+
+// makePositive     (Hilfsfunktion für 4a)
 // Eingabe:         Int
 // Ausgabe:         Int
 // Voraussetzung:   keine
@@ -95,15 +121,15 @@ def makePositive(n:Int):Int=
         7 + makePositive(n+7)
     
 
-// wDay
+// showWDay         (Aufgabe 4c)
 // Eingabe:         (Int,String,Int) oder (Int,Int,Int)
-// Ausgabe:         String
+// Ausgabe:         Int (oder String bei ungültiger Eingabe)
 // Voraussetzung:   es muss ein gültiges Datum eingetragen werden; der Monat
 //                  muss komplett ausgeschrieben, deutsch und mit großem
 //                  Anfangsbuchstaben sein, sofern es ein String ist
 // Effekt:          keiner
 // Ergebnis:        der Wochentag des gegebenen Datums wird ausgegeben
-def wDay(d:Int,m:String|Int,y:Int):String=
+def showWDay(d:Int,m:String|Int,y:Int):String=
     // erstelle mm, um die Sring-Eingabe und die Int-Eingabe
     // anzugleichen
     val mm:Int = m match {
@@ -138,3 +164,17 @@ def wDay(d:Int,m:String|Int,y:Int):String=
         else
             // wende jetzt mod 7 an und wandle in einen String um
             numberToDay(result%7)
+
+
+// wDay             (Aufgabe 4a)
+// Eingabe:         (Int,String,Int) oder (Int,Int,Int)
+// Ausgabe:         Int
+// Voraussetzung:   es muss ein gültiges Datum eingetragen werden; der Monat
+//                  muss komplett ausgeschrieben, deutsch und mit großem
+//                  Anfangsbuchstaben sein, sofern es ein String ist
+// Effekt:          keiner
+// Ergebnis:        gibt die Nummer zum Wochentag aus, wobei
+//                  So -> 0, Mo -> 1 usw.
+def wDay(d:Int,m:String|Int,y:Int):Int=
+    // wende wandle Datum in Wochentag um und Wochentag in Zahl
+    dayToNumber(showWDay(d,m,y))
