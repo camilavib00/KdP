@@ -59,4 +59,43 @@ def countsymbolsWhile(s):
         counter += 1
     return d
 
-        
+
+#Aufgabe 4
+"""
+b) Wahr oder Falsch: Falsch, es gibt nicht vergleichsbasierte Sortiergorithmen
+die Listen in O(n) sortieren können. Zum beispiel Bucketsort,
+welcher gut für die Binärsortierung gut gewesen wäre
+
+c) Falsch: Untere Schranke <-> kein Lagorithmus existiert,
+der das Problem schneller lösen könnte
+
+a)
+f2('Einhorn', 'Drache')
+-> if a: -> solange a korrekt ist, also Zahl, non-empty string etc wird
+if immer ausgewertet. bei if "":, if 0: wird zu else ausgewertet
+z ist lokal, z = 'Hallo Einhorn'
+
+print(x)
+print(z)
+z = f1(z)
+-> verdoppelt z
+print(z)
+print(y)
+f2('', 'Papagei') -> da empty string wird else ausgewertet
+print(y)
+
+Output:
+'Hallo Einhorn'
+'Hallo'
+'wie geht es so?'
+'Wie geht es so?Wie geht es so?'
+'Bye'
+'Bye Bye Papagei'
+
+
+d)
+call by value: ver immer direkt ausgewertet
+call by name: var immer erst ausgewertet wenn nötig,
+ merkt sich den einmal ausgewerteten ausgewert
+-> call by value ist schneller
+"""
