@@ -99,3 +99,42 @@ call by name: var immer erst ausgewertet wenn nötig,
  merkt sich den einmal ausgewerteten ausgewert
 -> call by value ist schneller
 """
+
+
+"""
+Aufgabe 2: sortieren
+Insertionsort
+Anfang der liste ist 'sortiert' man setzt nächstes elem an richtige stelle
+[66, 2, 98, 42, 76, 54]
+[66| 2, 98, 42, 76, 54]
+[2, 66| 98, 42, 76, 54]
+[2, 66, 98| 42, 76, 54]
+[2, 42, 66, 98| 76, 54]
+[2, 42, 66, 76, 98| 54]
+[2, 42, 54, 66, 76, 98]
+
+Mergesort
+Brute rekursiv splitten, sublisten Sortieren
+bei ungerader listen größe split bei untere grenze bei division /2 also 5 -> 2, 3->1
+[66, 2, 98, 42, 76, 54, 12, 33, 103, 34]
+....
+[[66], [2], [98], [42], [76], [54], [12], [33], [103], [34]]
+[[2, 66], [98], [42,76], [12, 54], [33], [34, 103]]
+[[2, 66], [42,76, 98], [12, 54], [33, 34, 103]]
+[[2, 42, 66, 76, 98], [12, 33, 34, 54, 103]]
+[2, 12, 33, 34, 42, 54, 66, 76, 98, 103]
+
+b) gute implementierung: Bucketsort
+"""
+
+def bucketSort(l):
+    c = [0,0]
+    for i in l:
+        c[i] += 1
+    res = []
+    for i in range(c[0]):
+        res.append(0)
+    for i in range(c[1]):
+        res.append(1)
+    return res
+    
