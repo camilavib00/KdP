@@ -30,8 +30,6 @@ def myZipWith[A](l1:List[A], l2:List[A], f: A => A):List[A]=
 def oneElemList[A](lst:List[List[A]]): Boolean =
     lst.exists(sublist => sublist.length == 1)
 
-//def firstTwo[A](lst:List[List[A]]):List[List[A]]=
-
 def get2Elems[A](l:List[A]):List[A]=
     l match
         case Nil => Nil
