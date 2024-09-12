@@ -1,6 +1,6 @@
 //Tutorium Zwischenklausur Besprechung
 //crazySum Implementierung
-def isEven(x:Int):Boolean = (n%2==0)
+def isEven(x:Int):Boolean = (x%2==0)
 
 //Voraussetzung: Zahl is >= 0, Ergebnis: crazySum wird errechnet, Effekt: keiner
 def crazySum1(n:Int):Int=
@@ -10,7 +10,7 @@ def crazySum1(n:Int):Int=
     case a => a + (a-1) + crazySum1(n-1)
 
 def crazySum2(n:Int):Int =
-  def help(element:Int, acc:Int)Int =
+  def help(element:Int, acc:Int):Int =
     element match
       case 0 => acc+1
       case x if (isEven(x)) => help(element-1,x+(x+1)+acc)
