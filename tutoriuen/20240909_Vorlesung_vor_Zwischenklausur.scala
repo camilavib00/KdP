@@ -131,10 +131,10 @@ def myHeadInt(l:List[Int]):Int=
         case Nil => throw Exception("Leere Liste")
         case x::xs => x
 
-def myReverse(l:List[Int]):List[Int]=
+def myReverse2(l:List[Int]):List[Int]=
     l match
         case Nil => Nil
-        case x::xs => myReverse(xs):::List(x)   // Konkatenation ist unschön implementiert
+        case x::xs => myReverse2(xs):::List(x)   // Konkatenation ist unschön implementiert
                                                 // daher ungünstig
 
 def myReverseTail(l:List[Int]):List[Int]=

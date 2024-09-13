@@ -1,4 +1,4 @@
-"""
+/*
 Aufgabe 3
 a) Was tut zipWith?
 Signatur: 
@@ -23,8 +23,8 @@ def myZipWith[A](list1: List[A], list2: List[A])(f: (A, A) => A): List[A] =
 
 def myZipWith[A](list1: List[A], list2: List[A])(f: (A, A) => A): List[A] =
   list1.foldRight((list2, Nil: List[A]))()
-"""
-//Aufgabe 4a
+*/
+/* //Aufgabe 4a
 
 //reverse mittels Linksfaltung
 //Signatur: List[A] -> List[A]
@@ -53,3 +53,5 @@ def querV(l:List[Int],v:Int):List[Int] =
   l match
     case Nil => Nil
     case x::xs if quersumme(x) > v => x::querV(xs,v)
+    case x::xs => querV(xs,v) 
+*/
