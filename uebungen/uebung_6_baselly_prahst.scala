@@ -90,3 +90,14 @@ def firstSplit(l:Link, c:Chain):(Chain,Chain)=
         // nicht
         case _ => firstSplit(l, Empty)
     
+// zum Testen:
+@main
+def testU6=
+    val chain1:Chain = Join(Join(Empty,G,Join(Empty,G,Empty)),S,Join(Join(Empty,P,Empty),P,Empty))
+    println("Testchain:\n" + chain1)
+    println("Funktion list:\n" + list(Join(Join(Empty,G,Join(Empty,G,Empty)),S,Join(Join(Empty,P,Empty),P,Empty))))
+    println("Funktion price ohne fold:\n" + price1(Join(Join(Empty,G,Join(Empty,G,Empty)),S,Join(Join(Empty,P,Empty),P,Empty))))
+    println("Funktion price mit fold:\n" + price2(Join(Join(Empty,G,Join(Empty,G,Empty)),S,Join(Join(Empty,P,Empty),P,Empty))))
+    println("Funktion: firstSplit mit G:\n" + firstSplit(G,(Join(Join(Empty,G,Join(Empty,G,Empty)),S,Join(Join(Empty,P,Empty),P,Empty)))))
+    println("Funktion: firstSplit mit S:\n" + firstSplit(S,(Join(Join(Empty,G,Join(Empty,G,Empty)),S,Join(Join(Empty,P,Empty),P,Empty)))))
+    println("Funktion: firstSplit mit P:\n" + firstSplit(P,(Join(Join(Empty,G,Join(Empty,G,Empty)),S,Join(Join(Empty,P,Empty),P,Empty)))))
