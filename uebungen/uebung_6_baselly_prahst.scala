@@ -91,7 +91,6 @@ def firstSplit(l:Link, c:Chain):(Chain,Chain)=
         case _ => firstSplit(l, Empty)
     
 // zum Testen:
-@main
 def testU6=
     val chain1:Chain = Join(Join(Empty,G,Join(Empty,G,Empty)),S,Join(Join(Empty,P,Empty),P,Empty))
     println("Testchain:\n" + chain1)
