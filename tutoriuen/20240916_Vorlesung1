@@ -1,0 +1,149 @@
+Vorlesung 1
+
+Wiederholung:
+- strukturelle Induktion
+- 3 Schritte für Korrektheit
+  (I)   Invariante finden
+        a) Inv(0) gilt vor erstem Durchlauf
+        b) (vor i-tem Durchlauf:) Inv(i-1) -> Inv(i) (<- nach i-tem Durchlauf)
+  (II)  Schleife terminiert
+  (III) Nach letztem Durchlauf m: In(m) AND NOT(while-Bed.) => Korrektheit
+
+
+Korrektheit der Sortieralgorithmen
+
+Selectionsort (funktional):
+
+// Vor: list.length>0
+// Erg: kleinstes Elemente der Liste ist geliefert
+def minimum[A:Ordering](list:List[A]):A=
+    val ord = summon[Ordering[A]]
+    import ord.mkOrderingOps
+    list match
+        case Nil => throw Exception("Minimum of empty list")
+        case List(x) => x
+        case (x::xs) => x min (minimum(xs))
+
+// Vor: keine
+// Erg: eine Liste mit allen Elementen aus list in aufsteigender Reihenfolge ist geliefert
+def selectionSort[A:Ordering](list:List[A]):List[A]=
+    val ord = summon[Ordering[A]]
+    import ord.mkOrderingOps
+    def removeFirst[A](list:List[A], q:A):List[A]=
+        list match
+            case Nil => Nil
+            case (x::xs) if (x==q) => xs
+            case (x::xs) => x::removeFirst(xs,q)
+      list match
+          case Nil => Nil
+          case _ => val m = minimum(list)
+                    val rest = removeFirst(list,m)
+                    m::selectionSort(rest)
+
+Zunächst Korrektheit von minimum und removeFirst (schon am Freitag und in der Übung gemacht)
+
+Hauptrekursion mit struktureller Induktion über list.
+I.A.  |list| = 0 bzw. list = Nil
+      Geben Nil zurück. Nil ist sortiert und hat alle Elemente der Ursprungsliste.
+I.V.  Für n beliebig, aber fest, gibt selectionSort für alle Listen der Länge <= n eine
+      sortierte Liste mit genau den Elementen der Eingabeliste aus
+I.S.  n -> n+1 bzw. xs -> x::xs
+      - list hat mindestens ein Elemente
+      - damit gibt minimum ein Element m mit
+        m <= y für alle y aus list zurück
+      - Also kann m in einer sortierten Reihenfolge vorne stehen
+      - removeFirst(list,m) entfernt das erste Vorkommen von m aus list
+      - m::removeFirst(list,m) enthält also genau die Elemente aus  list
+      - nach I.V. enthält dann m::selectionSort(removeFirst(list,m))
+        alle Elemente aufsteigend sortiert
+
+
+# selectionsort(List[int]):None
+# Eff: Die Elemente in list sind aufsteigend sortiert
+# Erg: keins
+def selectionsort(xs):
+    n = len(xs)
+    # Eff: keiner
+    # Erg: Der Index des ersten minimalen Elemente der Liste mit Index i...len(xs)-1
+    #      ist zurückgegeben
+    def min(i):
+        index = i+1
+        m = i
+        while (index<n):
+            if(xs[index]<xs[m]):
+                m = index
+            index = index + 1
+        return m
+    index = 0
+    while (index<n):
+        minindex = min(index)
+        xs[index], xs[minindex] = xs[minindex], xs[index]
+        index = index + 1
+
+Selectionsort (imperativ)
+    Korrektheit von min(i) -> Übung
+(I)   Inv(k): 
+        a)  Die Elemente an Index 0,...,k-1 von xs sind
+            aufsteigend sortiert
+        b)  Alle Elemente an Index 0,...,k-1 sind kleiner
+            oder gleich aller Elemente an Index k,...,n-1.
+        c)  index = k
+        d)  Menge der Elemente in xs ist gleich wie bei der
+            Eingabe
+      Inv(0) vor dem ersten Durchlauf:
+        c)  index = 0
+        a) + b) 0,...,-1 ist leere Sequenz, damit gelten a) + b) direkt
+      Angenommen, Inv(i-1) gilt vor i-tem Durchlauf:
+        c)  => index = i-1
+        Da minimum korrekt ist, ist minindex der Index einers kleinsten 
+          Elements an Indizex i-1,...,n-1
+        Wegen b) von Inv(i-1) ist list[minindex] ein kleinstes Element,
+          welches größer/gleich der Elemente an Index 0,...,i-2 ist. (*)
+        Nach dem Tausch an Position index ist Liste 0,...,i-1 dann
+          wegen (*) und Inv(i-1) a) aufsteigend sortiert. (Inv(i) a))
+        Und wegen (*) gilt auch Inv(i) b).
+        Wegen index = index + 1 als letzte Zeile und Inv(i-1) c) gilt auch
+          Inv(i) c).
+
+(II)  Nach n Durchläufen gilt Inv(n) c) also ist index = n >= n und die Schleife endet.
+
+(III) Nach der Schleife gilt Inv(n).
+        es gilt a), b), c) und dazu index >= n (Negation der while-Bedingung).
+      Korrektheit folgt direkt aus Inv(n) a).
+
+  
+Quicksort (imperativ)
+
+# partition(List[int], int, int)->int
+# Vor: 0<=start < end < len(x)
+# Eff: Bei Rückgabewert l sind alle Elemente an Index start,...,l-1 kleiner als x[l] und
+#      alle Elemente an Index l+1,...,end-1 sind größer als xs[l]
+# Erg: Die Position des Pivotelements ist geliefert
+def partition(xs,start, end):
+    pivot = xs[start]
+    l = start
+    i = start + 1
+    # INV(k): a) alle Elemente an Index star+1,...,l sind kleiner/gleich pivot
+    #         b) alle Elmenete an Index l+1,...,start+k sind größer pivot
+    #         c) die Menge der Elemente an start,...,end-1 sind ist gleich wie
+    #            bei der Eingabe
+    #         d) i = start + k + 1
+    while (i<end):
+        if (xs[i]<=pivot):
+            l = l + 1
+            xs[i], xs[l] = xs[l], xs[i]
+        i = i + 1
+
+(I)   Inv(k):
+        a)  alle Elemente an Index start+1,...,l sind <= pivot
+        b)  alle Elemente an index l+1,...,start+k sind
+            > pivot
+        c)  Menge der Elemente in list ist unverändert
+            zur Eingabe
+        d)  i = start + k + 1
+      Inv(0) vor erstem Durchlauf:
+        Es gilt l = start, i = start + 1
+        a) gilt, da start+1,...,start leere Sequenz ist
+        b) gilt, da l+1=start+1,...,start leere Sequenz ist
+        c) gilt, da list nicht verändert wurde
+        d) gilt, da i=start+1=start+0+1
