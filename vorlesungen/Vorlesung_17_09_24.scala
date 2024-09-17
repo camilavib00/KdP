@@ -54,3 +54,54 @@ class Lampe(private var power: Int):
     def change2(pow: Int):Unit = 
         if pow >= 0 && !on then
             power = pow
+
+class Studi(private val name:String):
+    private val subject: String = "Bio*Informatik"
+    private var ects: Int = 0
+    private val matr: Int = Studi.next_matr()
+
+    def study(topic: String): Unit = 
+        println(this.name + " reads a book about " + topic)
+        this.ects = this.ects + 1
+
+    def finished: Boolean = this.ects >= 180
+    def getMatr: Int = this.matr
+    def getName: String = this.name
+
+//val s1: Studi = new Studi("Katharina", 12345)
+//val s2: Studi = new Studi("Kristin", 12345)
+
+object Studi:
+    private var matr_counter: Int = 100
+
+    private def next_matr(): Int = 
+        matr_counter = matr_counter+1
+        matr_counter-1 //geschamckssache
+
+    def resetMatrCounter(new_counter: Int): Unit =
+        matr_counter = new_counter
+
+//Klassenhierarchie
+abstract class Person(private val name: String, private val age: Int):
+    def isGrownUp: Boolean = age >= 18
+    def introduction: String //keine Implementierung: abstrakte Methode
+    def work(): Unit //keine Implementierung: abstrakte Methode
+
+class Student(private val name: String, private var age: Int, private val mat: Int) extends Person(name, age):
+    def matr_nr: Int = mat
+    override def work(): Unit = println("Study, study")
+    override def introduction: String = "Hello, I am " + name + " and I am a student!"
+
+class DozentIn(private val name: String, private var age: Int, private var sal: Int) extends Person(name, age):
+    def salary: Int = sal
+    override def work(): Unit = println("Teach, teach")
+    override def introduction: String = "Hello, I am " + name + " and I am a lecturer!"
+
+
+def test():Unit = 
+    var p:Person = new Student("Kim", 20, 12345) //static type: Person, dynamic type: Student
+    p.work() //study, study
+    //p.matr_nr //Feher, da p als Person deklariert wurde
+    p = new DozentIn("Katharina", 30, 1000) //statischer Typ: Person, dynamischer Typ: DozentIn
+    p.work() //Teach, teach
+
