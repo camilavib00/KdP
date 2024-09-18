@@ -1,0 +1,93 @@
+Aufgabe 1
+
+1. Korrektheit von merge:
+    I.A.    -   |list1| = 0 bzw. list1 = Nil
+                gibt list2 zurück, list2 ist nach Voraussetzung sortiert und
+                alle Elemente aus list1 und list2 sind enthalten
+            -   |list2| = 0 bzw. list2 = Nil
+                gibt list1 zurück, list1 ist nach Voraussetzung sortiert und
+                alle Elemente aus list1 und list2 sind enthalten
+            -   sind beide Listen Nil, wird Nil zurückgegeben, was genau dieselben
+                Elemente enthält und sortiert ist
+    I.V.    Für n beliebig, aber fest, gibt merge für alle Listen der Länge <= n eine
+            aufsteigend sortierte Liste mit genau den Elementen der Eingabelisten aus
+    I.S.    n -> n+1
+            - list1 und list2 sind nach Voraussetzung jeweils aufsteigend sortiert
+            - damit sind die jeweils kleinsten Elemente der Listen auch die vordersten
+            - merge nimmt also die jeweils ersten Elemente list1[0], list2[0] und vergleicht diese,
+              und packt das kleinere vor den merge-Aufruf der übrigen listen
+            - auf die Listen in diesem merge-Aufruf können wir nun unsere I.V. anwenden, denn wir
+              wissen, dass es mit bis zu Länge n funktioniert
+            - das vorderste Element ist das kleinste der beiden Liste, da beide Listen sortiert
+              sind und wir das kleinste Element der beiden vorderen dafür ausgewählt haben
+            - also erhalten wir unsere Liste der Länge <= n, die aufsteigend sortiert ist und vorne hat
+              die Liste zusätzlich das Element, was wir vor den merge-Aufruf getan haben, was kleiner
+              als alle anderen Elemente ist
+            - die Liste enthält alle Elemente der Eingabelisten
+            
+2. Korrektheit von mergesort:
+    I.A.    - |list| = 0 bzw. list = Nil
+              gibt Nil zurück, was eine aufsteigend sortiert Kopie der Eingabeliste ist
+            - list = List(x)
+              gibt list zurück, was aufsteigend sortiert ist, da einelementig, und alle 
+              Elemente der Eingabeliste enthält
+    I.V.    Für n beliebig, aber fest, gibt mergesort für alle Listen der Länge <= n eine
+            aufsteigend sortierte Liste mit genau den Elementen der Eingabeliste aus
+    I.S.    n -> n+1
+            - |list| >= 2, d.h. beim Splitten kommen mindestens zwei einelementige Teillisten
+              heraus
+            - wenn |list| = n+1, wird merge auf jeweils mergesort auf die beiden Hälften der Liste ausgeführt
+            - unsere beiden Teillisten sind nur (n+1)/2 groß
+            - da (n+1)/2 <= n, können wir unsere I.V. auf die beiden Teillisten anwenden und wissen, dass 
+              mergesort für diese beiden Teillisten das richtige Ergebnis liefert
+            - dass merge korrekt ist, haben wir schon gezeigt, die Teillisten sind aufsteigend sortiert,
+              wenn merge auf sie angewendet wird
+            => die Ergebnisliste ist aufsteigend sortiert und enthält alle Elemente der Eingabeliste
+
+
+Aufgabe 2
+
+(I)     Inv(k):
+            {xs[m] ist ein Minimum von xs[i:i+k] (AND index=i+k) AND index<=len(xs)}
+        Inv(0) gilt vor dem ersten Durchlauf:
+            - {xs[m] ist ein Minimum von xs[i:i] (AND index=i) AND index<=len(xs)}
+            - Minimum von xs[i:i+0] = xs[i:i] = xs[i]
+            - Minimum von einem Element ist das Elemet selbst
+            - index <= len(xs) ? -> ja, denn xs beinhaltet mindestens i+1 Elemente nach Voraussetzung
+                und index = i vor dem ersten Durchlauf
+        Angenommen Inv(j-1) gilt vor dem j-ten Durchlauf.
+            - {xs[m] Minimum von xs[i:i+(j-1)] AND index = i+k+1 AND index<=len(xs)} = Inv(j-1)
+            - xs[i:i+j] enthält ein Element mehr, und zwar xs[i+j]
+            - wenn xs[m] <= xs[i+j], dann bleibt es das Minimum
+            - sonst wird m = i+j gesetzt
+            - wir haben in beiden Fällen:
+                xs[m] ist Minimum von xs[i:i+j]
+            - i+l=len(xs) -> index = len(xs) -> index <= len(xs)
+            - Inv(j) = {xs[m] ist Minimum von xs[i:i+j] AND index=i+j AND index<=len(xs)}
+(II)    nach n Durchläufen gilt Inv(n):
+
+
+Aufgabe 3:
+
+a) 
+def average(list:List[Int]):Double=
+    def help(l:List[Int],acc:Double,n:Double):Double=
+        list match
+            case Nil => 0.0
+            case x::Nil => x.toDouble
+            case x::xs => help(xs, (acc + x.toDouble)/n, n+1)
+    help(list,0,1) 
+
+
+Vovas Aufgabe:
+
+# Vor:  n>=0 and a - Zahl
+def power(a,n):
+    if n==0:
+        return 1
+    if(n%2 == 0):
+        return power(a*a,n//2)
+    else:
+        return power(a,n-1)*a
+
+funktion imperativ programmieren und zeigen, dass korrekt
