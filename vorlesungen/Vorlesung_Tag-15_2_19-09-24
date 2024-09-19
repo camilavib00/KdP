@@ -1,0 +1,157 @@
+// Vorlesung 2
+
+trait MyStack[A]:
+    // Objekte eines beliebig aber festen Typs A sind gespeichert
+
+    // Vor: Keine
+    // Erg: Keins
+    // Eff: x ist mun das oberste Element auf dem Stack
+    def push(x:A):Unit  // Laufzeit O(1)
+
+    def pop(x:A):Unit   // Laufzeit O(1)
+
+
+
+// Implementierung mit einem Array
+| . | this
+  |
+  v           bottom                top
+| 5 |     --> | x1 | x2 | x3 | x4 | x5 |  |  |  |  |
+-----    |
+| . | ---'
+
+              Beobachtung: array(size-1) ist oberstes Element
+
+push(x)
+| . | this
+  |
+  v  
+| 6 |     --> | x1 | x2 | x3 | x4 | x5 | x |  |  |  |   array(size) x
+-----    |                                              size = size + 1
+| . | ---'                                              Laufzeit O(1)
+
+pop()
+| . | this
+  |
+  v           
+| 4 |     --> | x1 | x2 | x3 | x4 |  |  |  |  |  |
+-----    |
+| . | ---'
+              tmp = array(size-1)
+              array(size-1) = null.asInstanceOf[A]
+              size = size - 1
+              Laufzeit O(1)
+
+
+// Analyse und Vergleich
+                |   verkettete Liste    |   Array statischer Größe  |   Array dynamischer Größe
+-------------------------------------------------------------------------------------------------------              
+Laufzeit        |                       |                           |
+    isEmpty     |   O(1)                |   O(1)                    |   O(1)
+    size        |   O(1)                |   O(1)                    |   O(1)
+    push        |   O(1)                |   O(1)                    |   O(n) bei resize, sonst O(1) (*)
+    pop         |   O(1)                |   O(1)                    |   O(n) bei resize, sonst O(1) (*)
+------------------------------------------------------------------------------------------------------- 
+Caching         | verteilt im Speicher  | eng zusammen im Speicher  | eng zusammen
+------------------------------------------------------------------------------------------------------- 
+Speicherplatz   | nur Elemente und      | Kapazität kann deutlich   | max 4x so viel wie Anzahl der
+                | Verwaltungskopf       | größer sein, als Anzahl   | Elemente
+                |                       | der Elemente              |
+------------------------------------------------------------------------------------------------------- 
+Einschränkungen |   keine               | begrenzte Kapazität       | keine
+------------------------------------------------------------------------------------------------------- 
+(*) Eine Folge von n push- und pop-Operationen hat eine Laufzeit von O(n).
+    Man sagt auch push, pop haben eine amortisierte Laufzeit von O(1).
+
+// Arrays mit dynamischer Größe
+Passe Größe des Arrays so an, dass die folgende Invariante gilt:
+   (INV)    array.length/4 <= _size < array.length 
+   Wenn (INV) bei push/pop verletzt wird, kopiere alle Elemente in Array doppelter/halber Größe.
+
+Dies passiert in privater Methode resize()  // privat, damit Array von außen nicht kaputt gemacht werden kann
+    old     |xxxx|    |    |    | -> |xxxx|    |    new
+    old     |xxxx|xxxx|xxxx|xxxx| -> |xxxx|xxxx|xxxx|xxxx|    |    |    |    |    new   
+
+
+// Queue (Warteschlange)
+first-in-first-out (FIFO):
+    Elemente können eingefügt (enqueue) werden und das älteste Element kann entfernt/zurückgegeben (dequeue) werden.
+
+        |   Huhn    |   Apfel   |   Übungszettel    |
+        |           |   Apfel   |   Übungszettel    |
+        |           |           |   Übungszettel    |
+        |           |           |                   |
+
+// 1. Verkettete Knoten
+        | . | this
+        |
+        v                        
+_size   | 3 |     --> | a |   | -> | b |   | -> | c |   | -> null 
+        -----    |
+front   | . | ---'                                  ^
+        -----                                       |
+back    | . | --------------------------------------'     
+
+
+enqueue(x):
+
+        | . | this
+        |
+        v                        
+_size   | 4 |     --> | a |   | -> | b |   | -> | c |   | -> | x |   | -> null 
+        -----    |
+front   | . | ---'                                  ^
+        -----                                       |
+back    | . | --------------------------------------'  
+
+- erzeuge neuen Knoten n mit item x und next null
+- back.next = n
+- back = n
+- size += 1
+
+dequeue():
+        | . | this
+        |
+        v                        
+_size   | 2 |     --> | a |   | -> | b |   | -> null 
+        -----    |
+front   | . | ---'                     ^
+        -----                          |
+back    | . | -------------------------'  
+
+trait MyQueue[A]:
+    // Vor: keine
+    // Erg: keins
+    // 
+    def enqueue(x: A) : Unit
+
+    // Erg: Das älteste Element der Queue ist geliefert
+    // Eff: Das älteste Element ist aus der Queue entfernt
+    //
+    def dequeue(): A
+
+class LinkedNodeQueue[A] extends MyQueue[A]:
+    private class Node(val item:A, var next:Node)
+
+    private var _size : Int = 0
+    private var frontNode : Node = null
+    private var backNode : Node = null
+
+    def isEmpty : Boolean = frontNode == null
+    def soze : Int = _size
+
+    def enqueue(x: A): Unit=
+        val n : Node = new Node(x,null)
+        if ! isEmpty then
+            backNode.next = n
+        else
+            frontNode = n
+        backNode = n
+        _size += 1
+
+    def dequeue() : A =
+        if isEmpty then throw new Exception("Empty Queue")
+        val n : Node = frontNode
+        frontNode = frontNode.next
+        _size -= 1
+        n.item
