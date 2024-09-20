@@ -1,21 +1,21 @@
 // Beispiele zu Traits
 
-trait WorkingPerson:
+trait WorkingPerson2:
     def work():Unit
     def salary : Int
 
-trait LearningPerson:
+trait LearningPerson2:
     def learn(topic:String):Unit
 
-class Person(private val name:String, private var age:Int):
+class Person2(private val name:String, private var age:Int):
     def isGrownUp:Boolean = age >= 18
     override def toString() = name
 
-class Studi(name:String, age:Int, mat:Int) extends Person(name, age), LearningPerson:
+class Studi2(name:String, age:Int, mat:Int) extends Person2(name, age), LearningPerson2:
     def matrNr:Int = mat
     def learn(topic: String): Unit = println("I learn about " + topic)
 
-class DozentIn(name:String, age:Int, sal:Int) extends Person(name, age), LearningPerson, WorkingPerson:
+class DozentIn2(name:String, age:Int, sal:Int) extends Person2(name, age), LearningPerson2, WorkingPerson2:
     def salary:Int = sal
     def work(): Unit = println("Prepare Lecture")
     def learn(topic: String): Unit = println("I research about "+ topic)
