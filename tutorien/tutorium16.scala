@@ -1,41 +1,5 @@
-// Beispiele zu Traits
-import scala.compiletime.ops.double
-
-trait WorkingPerson2:
-    def work():Unit
-    def salary : Int
-
-trait LearningPerson2:
-    def learn(topic:String):Unit
-
-class Person2(private val name:String, private var age:Int):
-    def isGrownUp:Boolean = age >= 18
-    override def toString() = name
-
-class Studi2(name:String, age:Int, mat:Int) extends Person2(name, age), LearningPerson2:
-    def matrNr:Int = mat
-    def learn(topic: String): Unit = println("I learn about " + topic)
-
-class DozentIn2(name:String, age:Int, sal:Int) extends Person2(name, age), LearningPerson2, WorkingPerson2:
-    def salary:Int = sal
-    def work(): Unit = println("Prepare Lecture")
-    def learn(topic: String): Unit = println("I research about "+ topic)
-
-//Typparameter
-class Box[A]:
-    private var elements: List[A] = Nil
-
-    def add(elem: A): Unit =
-        elements = elem :: elements
-    def get():A=
-        val rand = new scala.util.Random
-        val i:Int = rand.nextInt(elements.size)
-        val elem = elements(i)
-        elements=elements.take(i) ::: elements.drop(i+1)
-        return elem
-
-// ADT Stack - Trait und Implementierung mit verketteten Knoten
-
+/* Aufgabenzettel von gestern: Klammerausdrücke */
+/*
 trait MyStack[A]:
     //Objekte eines belibig aber festen Typs A sind gespeichert
 
@@ -58,59 +22,6 @@ trait MyStack[A]:
     // Erg: Die Anzahl der Elemente auf dem Stack ist geliefert
     // Eff: keiner
     def size: Int
-
-
-class LinkedNodeStack[A] extends MyStack[A]:
-
-    private class Node(val item:A, val next:Node)
-
-    private var _size : Int = 0
-    private var topNode : Node = null
-
-    def isEmpty: Boolean = size == 0
-    def size :Int = _size
-
-    def push(elem:A):Unit=
-        val n = new Node(elem, topNode)
-        topNode = n
-        _size = _size + 1
-
-    def pop():A =
-        if isEmpty then throw new Exception("Empty Stack")
-        val n : Node = topNode
-        topNode = topNode.next
-        _size = _size -1
-        n.item
-
-    override def toString(): String = 
-        var s : String  = "top<"
-        var n : Node = topNode
-        while n != null do
-            s += " |" + n.item
-            n=n.next
-        s+="<bottom"
-        s
-
-import scala.reflect.ClassTag
-
-class ArrayStack[A: ClassTag](private val capacity:Int) extends MyStack[A]:
-    private var array: Array[A] = new Array[A](if capacity < 1 then 1 else capacity)
-    private var _size : Int = 0
-
-    def isEmpty: Boolean = _size == 0
-    def size: Int = _size
-
-    def pop(): A =
-        if isEmpty then throw new Exception("Empty Stack")
-        val result = array(_size-1)
-        array(_size-1) = null.asInstanceOf[A]
-        _size -= _size
-        result
-
-    def push(x: A): Unit =
-        if _size == array.length then throw new Exception("Stack is full")
-        array(_size) = x
-        _size += 1
 
 class DynArrayStack[A:ClassTag] extends MyStack[A]:
     private var array : Array[A] = new Array[A](1)
@@ -183,13 +94,60 @@ def alleKlammern(s:String): Boolean =
             else stack.pop()
     return korrekt && stack.isEmpty
 
-            
+*/
+/* Abstrakte Datentypen: implementieren Sie die Queue mit einem dynamischen Array */
+/*
+import scala.reflect.ClassTag
+trait MyQueue[A]:
+    //Objekte eines beliebig aber festen Typs A sind gespeichert
 
+    //Vor: Keine
+    //Erg: Keins
+    //Effekt: x ist nun das aktuellste Element in der Queue
+    def enqueue(x: A) : Unit
 
-            
+    //Vor: Der Stack ist nicht leer
+    //Erg: Das älteste Element der Queue ist geliefert
+    //Eff: Das älteste Element aus der Queue entfernt
+    def dequeue(): A
 
+    //Vor: Keine
+    //Erg: Es ist true geliefert, genau dann wenn die Queue leer ist
+    //Eff: Keiner 
+    def isEmpty : Boolean
 
+    //Vor: Keine
+    //Erg: Die Anzahl der Elemente in der Queue ist geliefert
+    //Eff: Keiner
+    def size : Int
 
+class DynQueue[T:ClassTag] extends MyQueue[T]:
+    private var array: Array[T] = new Array[T](1)
+    private var head:Int = 0
+    private var tail:Int = 0
+
+    def enqueue(item: T): Unit =
+        if (tail == array.length) then
+            array = array ++ new Array[T](array.length)
+        array(tail) = item
+        tail += 1
     
+    def dequeue(): T =
+        if isEmpty then
+            null.asInstanceOf[T]
+        else
+            val item = array(head)
+            head += 1
+            CropArray()
+            return item
     
-        
+    private def CropArray():Unit = 
+        if(array.length > 4*(tail-head)) then
+            var x = new Array[T](array.length/4)
+            for (i <- head to tail) do 
+                x(i-head) = array(i)
+            array = x
+        else
+            array= array
+
+*/
