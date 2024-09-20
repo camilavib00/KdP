@@ -154,34 +154,6 @@ class DynArrayStack[A:ClassTag] extends MyStack[A]:
         s+="<top"
         s
 
-def Klammern(s:String):Boolean=
-    val stack = new DynArrayStack[Char]
-    var korrekt = true
-    for c <- s do
-        if c == '(' then
-            stack.push(c)
-        else if c == ')' then
-            if stack.isEmpty then korrekt = false
-            else
-                stack.pop()
-    return korrekt && stack.isEmpty
-            
-def alleKlammern(s:String): Boolean = 
-    val stack = new DynArrayStack[Char]
-    var korrekt = true
-    for c <- s do
-        if (c == '(') || (c == '{') || (c == '[') then
-            stack.push(c)
-        else if c == ')' then
-            if (stack.isEmpty) || (stack.top != '(') then korrekt = false
-            else stack.pop()
-        else if c == '}' then
-            if (stack.isEmpty) || (stack.top != '{') then korrekt = false
-            else stack.pop()
-        else if c == ']' then
-            if (stack.isEmpty) || (stack.top != '[') then korrekt = false
-            else stack.pop()
-    return korrekt && stack.isEmpty
 
             
 
