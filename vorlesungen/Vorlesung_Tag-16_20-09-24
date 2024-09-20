@@ -1,0 +1,187 @@
+// Vorlesung 1
+
+// Queue mit Arrays (statischer Größe)
+
+Idee:
+    |  |  | a | b | c | d | e | f |  |  |
+            ^                   ^
+            |                   |
+          front                back
+
+    |  |  |  |  | c | d | e | f | x | y |
+                  ^                   ^
+                  |                   |
+                front                back
+Problem:    Platz im Array, aber back == array.length-1
+
+Lösung: Wrap-around
+    |xxx|        |xxx|
+        ^        ^
+        |        |
+       back    front
+Umsetzung:  back = back + 1%array.length
+
+|  |  |  |  |  |         |  |  |  |  |  |  |
+        ^                        ^  ^
+        |                        |  |
+    back+front                 back front
+    size = 1                    size = n bzw. size = 0
+Wie wird leere Queue dargestellt?
+    1.  Größe explizit speichern
+    2.  back zeigt aufs nächste freie Feld  <- verwenden wir
+
+    |  |  |  |  |  |  | size = 0
+           ^^
+           ||
+        back+front
+
+    |  |xxxxxxxxxxxxxxx| size = n-1
+     ^  ^
+     |  |
+   back front
+
+    |  |  | - |  |  |  | size = 1
+            ^   ^
+            |   |
+         front back
+
+class ArrayQUeue[A:ClassTag](private val capacity:Int) extends MyQueue[A]:
+
+    private val n : Int = if capacoty < 1 then 1 else capacity
+    private val array:Array[A] = new Array[A](n)
+    private var front = 0
+    private var back = 0
+
+    def isEmpty: Boolean = front == back
+
+    def size: Int = (back-front+n)%n
+
+    def enqueue(x: A): Unit =
+        if size >= n-1 then throw new Exception("Queue full")
+        array(back) = x
+        back = (back+1) % n
+
+    def dequeue(): A =
+        if isEmpty then throw new Exception("Empty Queue")
+        val result: A = Array(front)
+        array(front) = null.asInstanceOf[A]
+        front = (front+1) % n
+        result
+
+
+// Immutable Queue
+
+trait ImmutableQueue[A]:
+    // Gespeichert werden beliebige Daten von einem festen Typ A
+
+    def size: Int
+    def isEmpty: Int
+
+    // Vor: keine
+    // Erg: eine neue ImmutableQueue mit elem als neustem Element 
+    //      ist geliefert
+    def enqueue(elem: A): ImmutableQueue[A]
+
+    // Vor: Die Queue ist nicht leer
+    // Erg: ein Tupel aus dem ältesten Element und der Queue ohne 
+    //      das älteste Element ist geliefert
+    def dequeue(): (A, ImmutableQueue[A])
+
+
+Wollen intern Immutable Datentypen benutzen
+
+Problem einer Scala Liste:
+    entweder enqueue oder dequeue hat Laufzeit O(n)
+
+Lösung: Zwei Listen.
+
+    | x1 x2 x3 | x4 x5 x6 | ->  | x1 |   und   | x6 |
+        front         back      | x2 |         | x5 |
+                                | x3 |         | x4 |
+                                ------         ------
+                                  aus            ein
+
+    enqueue(x): Füge x vorne an ein hinzu und gebe neue Queue zurück
+                -> Laufzeit O(1)
+
+    dequeue():  Wenn aus nicht leer: gebe Tupel aus aus.head und
+                neuer Queue (aus tail.ein) zurück
+                -> Laufzeit O(1)
+    
+                Wenn aus leer ist, ein aber nicht:
+                drehe ein um und mache zum neuen aus, ein ist dann 
+                leer. Dann wie oben.
+                -> Laufzeit O(n)
+
+                aber amortisiert O(1)
+
+
+class FunctionalListQueue[A](private val input: List[A],
+                             private val output: List[A])
+                             extends FunctionalQueue[A]:
+    private def reverse: FunctionalListQueue[A] =
+        if input.isEmpty then FunctionalListQueue[A](input.reverse, Nil) else this
+
+    def size: Int = input.length + output.length
+    def isEmpty: Boolean = size == 0 // input.isEmpty && output.isEmpty (isEmpty-Fkt. der Scala-Listen)
+
+    def enqueue(elem: A):FunctionalListQueue[A] = 
+        new FunctionalListQueue[A](elem::input, output)
+
+    def dequeue:(A, FunctionalListQueue[A]) =
+        if isEmpty then throw new Exception("Empty Queue")
+        val q = this.reverse
+        (q.output.head, new FunctionalListQueue[A](q.input, q.ouput.tail))
+
+
+
+// Prioritätswarteschlangen
+
+Ähnlich zu normaler Queue, aber jedes Element hat eine Priorität aus einem
+total geordnetem Universum.
+Elemente mit kleinerer Priorität müssen vor Elementen mit größerer Priorität 
+ausgegeben werden.
+
+Zur Übersichtlichkeit ignorieren wir die Elemente und betrachten nur die 
+Prioritäten.
+
+trait PrioQueue[K:Ordering]:
+    // In einer Prioritätswarteschlange werden Elemente aus einem total 
+    // geordnetem Universum gespeichert
+
+    // Vor: keine
+    // Eff: Das Element key ist zur Prioritätswarteschlange hinzugefügt
+    // Erg: keins
+    def insert(key: K): Unit
+
+    // Vor: Die Prioritätswarteschlange ist nicht leer
+    // Eff: Das kleinste Element ist aus der Prioritätswarteschlange entfernt
+    // Erg: Das kleinste Element ist geliefert
+    def extractMin():K
+
+    // Vor: keine
+    // Eff: keiner
+    // Erg: true ist geliefert, genau dann, wenn die Prioritätswarteschlange leer ist
+    def isEmpty: Boolean
+
+
+Anwendungen:
+    -   Prozessverwaltung im Betriebssystem
+    -   Datenübertragung im Netzwerk
+    -   Datenbankmanagementsysteme
+    -   Algorithmen, z. B. Dijkstra für kürzeste Wege in Graphen
+    -   Druckerwarteschlangen
+
+Sortieren mit Prioritätswarteschlangen:
+
+def prioQueueSort[K:Ordering](array:Array[K]): Unit = 
+    val n = array.length
+    val pq: PrioQueue[K] = new PQImpL[K]()
+    for a <- array do pq.insert(a)
+    for i <- 0 to n-1 do
+        array(i) = pq.extractMin()
+
+-> Nicht inplace
+
+___________________________________________________________________________________________
+// Vorlesung 2
