@@ -152,16 +152,4 @@ class DynArrayStack[A:ClassTag] extends MyStack[A]:
             s += " |" + array(i)
             i=i+1
         s+="<top"
-        s
-
-
-            
-
-
-            
-
-
-
-    
-    
-        
+        s    
