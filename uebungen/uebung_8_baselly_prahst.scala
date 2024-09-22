@@ -1,13 +1,6 @@
 /**
   * Aufgabe 1 Objektorientierte Programmierung
-Definieren Sie eine Klasse Geom3D und eine Hierarchie, in der als Unterklassen 
-von Geom3D geeignete Klassen Wuerfel, Quader, Kugel und Tetraeder vorkommen. 
-Definieren Sie fu ̈r die einzelnen Klassen sinnvolle Attribute, Konstruktoren 
-sowie Methoden volume() und surfaceArea(), die das Volumen bzw. die Oberfla ̈che 
-bestimmen.
-Schreiben Sie dann ein Programm, das fu ̈r ein Array von verschiedenen solchen 
-geometrischen Ko ̈rpern das Gesamtvolumen bzw. die Gesamtoberfla ̈che berechnet.
-Mit einer main-Funktion geom3Demo soll das Ganze dann getestet werden. */
+*/
 //import scala.compiletime.ops.double
 
 trait Geom3D[A]:
