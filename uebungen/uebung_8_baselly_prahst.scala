@@ -167,7 +167,7 @@ def geom3Demo =
   * Ein Dequeue (double ended queue) ist eine Mischung aus einem Stack und einer
   * Queue. Hier können Elemente jeweils vorne und hinten angehängt werden können.
   * Die Operationen heißen addFront, addBack, removeFront und removeBack zusätzlich zur isEmpty Funktion
-  * a) Spezifikationen
+  * a) Spezifikationen weiter unten in den Kommentaren der trait Definition
   * b) Beschreibung der Implementierung
   * Zuerst müssen wir eine private class von Nodes erzeugen, 
   * die Infomationen über das gespeicherte item und den 'pointer' zur nächsten, 
@@ -176,8 +176,7 @@ def geom3Demo =
   * der die Anzahl der Elemente enthält und einen Pointer zum ersten und einen zum letzten Element speichert.
   * Implementierte Methoden triviale isEmpty Funktion 
   * addBack(x) sollte enqueue(x) entsprechen. ähnliches gilt für:
-    removeFront() ~ dequeue
-    addFront(x) ~ push(x), removeBack ~ pop()
+    removeFront() ~ dequeue, addFront(x) ~ push(x), removeBack ~ pop()
   * c) Implementierung
   */
 
