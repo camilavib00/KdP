@@ -1,0 +1,170 @@
+// Vorlesung 2
+// Binärer Heap (Heapsort)
+
+T_in(n) = O(log n)
+T_out(n) = O(log n)     // (bubbleDown)
+
+->  O(n log n) für Sortieren
+
+inplace ?   nein, O(n) extra Speicher für PrioQueue
+stabil  ?   nein
+
+// Inplace Heapsort:
+
+Bis jetzt: PrioQueue als Blackbox, daher nicht inplace.
+Jetzt: Benutze interne Informationen.
+
+2 Phasen:
+    1.  "Heapify"       |       |   |      |   (heap, cut in der Mitte)
+                               i-1  i
+        In Runden: In Runde i: bubbleUp(i)
+            danach: array(0)...array(i) gültige Heap Repräsentation der
+            ersten i+1 Elemente der Eingabe    (wäre Invariante)
+
+                          |--------------|     (tauschen)
+                          v              v
+    2.  Sortieren       |   |          |   |
+                         min
+        In Runden: In Runde i: Tausche Element an Index 0 (das ist das 
+            Minimum der Elemente an Indizes 0,...,n-i) an Index n-i
+            bubbleDown - Variante, die maximal bis Index n-i-1 läuft.
+
+def parent(i:Int) : Int = (i-1)/2
+def left(i:Int) : Int = 2*i + 1
+def right(i:Int) : Int = 2*i + 2
+
+def swap[A](array:Array[A], i:Int, j:Int):Unit = 
+    val tmp = array(i)
+    array(i) = array(j)
+    array(j) = tmp
+
+def bubbleUp[K:Ordering](array:Array[K], last:Int):Unit =
+    val ord = summon[Ordering[A]]
+    import ord.mkOrderingOps
+    var i:Int = last
+    while(array(parent(i))> array(i)) do
+        swap(i, parent(i))
+        i = parent(i)
+
+def bubbleDown[K:Ordering](array:Array[K], last:Int):Unit:Unit = 
+    val ord = summon[Ordering[A]]
+    import ord.mkOrderingOps
+    var i:Int = 0
+        while (left(i) <= last && array(left(i))< array(i) || right(i) <= last && array(right(i))<array(i)) do
+        // Wenn das rechte Kind existiert und ein Minimum ist, wird rekursiv mit diesem weitegemacht.
+        // Ansonsten existiert wegen der if Bedingung das linke Kind und es ist kleiner als das aktuelle Element
+        val child : Int = if right(i) <= last && array(right(i)) < array(left(i)) then right(i) else left(i)
+        swap(i,child)
+        i = child
+
+// Vor: keine
+// Erg: kein
+// Eff: Die Elemente in array sind absteigend sortiert
+def heapsort[K:Ordering](array:Array[K]):Unit = 
+    val n = array.length
+    for i <- 1 to n-1 do
+        bubbleUp(array, i)
+    for stop <- n-1 to 1 by -1 do
+        swap(array,0,stop)
+        ... ? s. Code heapsort.scala
+
+
+Bei Min-Heap bubble-Funktionen ist die Liste dann absteigend Sortiert. 
+Bei Max-Heap aufsteigend.
+
+Laufzeit:   O(n log n), inplace aber nicht stabil
+
+Wichtig für Klausur:
+    Prioritätswarteschlagen:
+    - mit bin heaps können wir sie ziemlich effizient implementieren
+    - weitere Eigenschaften ableiten können
+    - weitere Varianten der Operationen ableiten und implementieren können
+    - Ausführen Operationen auf heap 
+
+---------------------------------------------------------------------------------------
+// ADT Wörterbuch
+
+-   Gespeicherte Daten: Schlüssel-Wert-Paare
+-   3 Methoden: 
+    -   suchen(key):            Finde den Wert zu key
+    -   einfügen(key,value):    Füge Paar (key,value) ein
+    -   löschen(key):           Lösche Eintrag mit Schlüssel key
+
+Annahme:    Jeder Schlüssel ist maximal einmal im Wörterbuch.
+
+Anwendungen:
+    -   Echtes Wörterbuch
+    -   Compilerbau
+    -   Datenbanken
+    -   Rechtschreibkorrektur
+    -   Softwareeinstellungen
+
+trait MyDict[K,V]:
+    // Es werden Schlüssel-Wert Paare gespeichert mit Schlüsseln
+    // von Typ K und Werten von Typ V
+    // Für jeden Schlüssel ist maximal ein Wert gespeichert
+
+    // Vor: keine
+    // Eff: Das Wörterbuch enthält den Eintrag (key, value)
+    // Erg: keins
+    def put(key: K, value: V): Unit
+
+    // Vor: keine       Alternativ: Ein Eintrag mit Schlüssel key ist vorhanden
+    // Eff: Das Wörterbuch enthält keinen Eintrag mit Schlüssel key
+    // Erg: keins
+    def remove(key: K): Unit
+
+    // Vor: Das Wörterbuch hat einen Eintrag mit Schlüssel key
+    // Eff: keiner
+    // Erg: Der Wert des Eintrags mit Schlüssel key ist geliefert
+    def get(key:K):V
+
+    // Vor: keine
+    // Eff: keiner
+    // Erg: Es ist true geliefert, genau dann, wenn es einen Eintrag mit Schlüssel 
+    //      key im Wörterbuch gibt
+    def contains(key: K): Boolean
+
+    // Vor: keine
+    // Eff: keiner
+    // Erg: true ist geliefert, genau dann, wenn das Wörterbuch leer ist
+    def isEmpty: Boolean
+
+
+// Implementierungen
+    1. Verkettete Knoten     |key|value|next|->
+        a.  get(key) bzw. contains(key)
+            - Laufe von vorne nach hinten durch alle Knoten 
+            - wenn aktueller Knoten key als Schlüssel hat, gebe value bzw. true
+              zurück, sonst gehe zu next
+            - Wenn alle Knoten angeschaut und nicht gefunden -> Exception bzw.
+              false
+            Laufzeit von get/contains: O(n), da im schlechtesten Fall alle
+            Elemente angeschaut werden.
+        b.  remove(key)
+            - Finde Knoten vor Knoten mit Schlüssel key wie bei get(key).
+            - Wenn gefunden, passe Verkettung an.       // also einfach next Node ersetzen, sodass
+                                                        // der Knoten nicht mehr in der Kette ist
+            - Wenn nicht gefunden, tue nichts.
+            Laufzeit von remove: Im schlechtesten Fall ist der Schlüssel nicht enthalten und
+                                 alle Elemente werden durchlaufen -> O(n)
+        c.  put(key,value)
+            - Prüfe, ob Schlüssel schon enthalten.
+            - Wenn ja, aktualisiere Eintrag.
+            - Wenn nein: Füge neuen Knoten hinzu.
+            Laufzeit: O(n)
+        
+    2. Arrays           | x1 | x2 | x3 |   |   |
+        n: # Elemente
+        a.   get/contains
+             - Laufe durch alle Einträge und teste, ob der Schlüssel des Eintrags der gesuchte Schlüssel ist. Wenn ja -> Wert bzw. true zurückgeben
+             - Wenn bis einschießlich Index n-1 nicht gefunden -> Exception bzw. false
+             Laufzeit: O(n) siehe oben
+        b.  remove(key)
+            - Finde Eintrag mit Schlüssel key. Sei Index i.
+            - Tausche Elemente an Index i und n-1.
+            - Lösche Eintrag, der jetzt an Index n-1 ist und dekrementiere n.
+            - Falls nicht gefunden, tue nichts.
+            Laufzeit: O(n) siehe oben
+
+    
