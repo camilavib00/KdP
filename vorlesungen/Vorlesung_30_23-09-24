@@ -66,7 +66,7 @@ def heapsort[K:Ordering](array:Array[K]):Unit =
         bubbleUp(array, i)
     for stop <- n-1 to 1 by -1 do
         swap(array,0,stop)
-        ... ? s. Code heapsort.scala
+        bubbleDown(array, stop-1)
 
 
 Bei Min-Heap bubble-Funktionen ist die Liste dann absteigend Sortiert. 
