@@ -1,0 +1,76 @@
+verkettete Liste: kein random Zugriff auf i: gehe i schritte, um i zu finden
+array: random Zugriff ist möglich
+
+Binär zu Dezimal:
+    1001 -> 1*2^3 + 0*2^2 + 0*2^1 + 1*2^0 
+
+Oktal zu Dezimal:
+    20352 (Okt) = 2*8^4 + 0*8^3 + 3*8^2 + 5*8^1 + 2*8^0
+          = 8426 (Dez)
+
+Hexa zu Dezimal:
+    20EA (Hex) = 2*16^3 + 0*16^2 + 14*16^1 + 10*16^0
+               = 8426 (Dez)
+
+Map Funktion:
+    Rekursion:
+    def myMap[A,B](f:A=>B,l:List[A]):List[B]=
+        l match
+            case Nil => Nil
+            case x::xs => f(x)::myMap(f,xs) // Laufzeit: O(n), wenn f in endlicher Zeit angewendet werden kann
+
+    Endrekursiv:
+    def myMapTail[A,B](f:A=>B,l:List[A]):List[B]=
+        def help[A,B](f:A=>B,ls:List[A],acc:List[B]):List[B]=
+            ls match
+                case Nil => acc.reverse
+                case x::xs => help(f,xs,f(x)::acc)
+        help(f,l,Nil)
+
+    Faltung: // right, echt rekursiv
+    l.foldRight(Nil)((x,y)=>f(x)::y) // y: Akkumulator
+
+    // left, endrekursiv
+    l.foldLeft(Nil)((acc,x)=>acc:::List(f(x)))
+
+    // alternativ
+    def mapfoldl[A,B](f:(A=>B),l:List[A]):List[B] = (l.foldLeft(Nil)((acc,x)=> f(x)::acc)).reverse
+
+Faltung:
+    flatten[A](l:List[List[A]]):List[A]=
+        l.foldRight(Nil)(_:::_)
+
+Korrektheitsbeweis:
+I)  1.  Zeige, dass Inv(0) vor erstem Durchlauf gilt.
+        (i)     count = 0
+        (ii)    erg = 0    an Index 0...-1, stehen keine 
+                Zahlen, also ist Inv(0) Teil 2
+                erfüllt
+    2.  Z.z.:   Wenn Inv(i-1) vor Durchlauf i gilt, dann gilt
+                Inv(i) nach Durchlauf i.
+        Nach Vor ist count = i-1 und erg die Summe aller geraden
+        Zahlen an Indizes 0...i-2 (oder 0, wenn es dort keine
+        geraden Zahlen gibt)
+        Fall 1: xs[i-1] ist gerade
+            dann ist Summe gerader Zahlen an Index 0...i-1 die Summe
+            der geraden Zahlen an 0...i-2 + xs[i-1]
+            Wenn xs[i-1] = xs[count] gerade ist, ist die if-Bedingung
+            wahr und erg wird auf erg + xs[i-1] gesetzt:
+            Inv(i) (ii) gilt also
+        Fall 2: xs[i-1] nicht gerade
+            Summe der geraden Elemente an Index 0...i-1 ist 
+            Summe der geraden Elemente an Index 0...i-2 ist.
+            If-Bedingung ist false und erg wird nicht verändert.
+            Damit gilt Inv(i)
+        (i) k-1 ={Vor} count =>{13} count = count + 1, also count = i
+
+II)     n ist endlich und nach n Durchläufen gilt Inv(n) => count = n
+        und da !(n < n), terminiert die Schleife.
+
+III)    Zeige, dass Spezifikation gilt:
+        Nach letztem Durchlauf gilt Inv(n)
+            (i)     n = count
+            (ii)    erg ist Summe der geraden Zahlen an Index 0...n-1
+                    oder 0, wenn es keine geraden Zahlen gibt.
+        Da n = len(xs), ist Inv(n) (ii) das Ergebnis aus der Spezifikation.
+
